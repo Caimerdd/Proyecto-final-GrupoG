@@ -4,14 +4,26 @@ Proceso menuPaga
 	Escribir "1. Area de Concina";
 	Escribir "2. Area de Bar";
 	Escribir "3. Area de Meseros";
+	Escribir "4. Salir";
 	leer Op;
 	Segun Op Hacer
 		1:
-			Escribir "Su paga por trabajar en el area de la cocina es de...";
+			Escribir "1. Agregar";
+			Escribir "2. Mostrar";
+			Escribir "3. Volver";
+			
 		2:
-			Escribir  "Su paga por trabajar en el area del bar es de...";
+			Escribir "1. Agregar";
+			Escribir "2. Mostrar";
+			Escribir "3. Volver";
+			
 		3:
-			Escribir "Su paga por trabajar en el area de mesero es de...";
+			Escribir "1. Agregar";
+			Escribir "2. Mostrar";
+			Escribir "3. Volver";
+			
+		4:
+			Escribir "Saliendo...";
 		De Otro Modo:
 			Escribir "Opción no valida";
 	FinSegun
