@@ -21,8 +21,8 @@ void showInfoBar();
 
 void principal()
 {
-
-    bool area_loop = true;
+    //Menu principal
+    bool area_loop = true; //loop para que siempre se muestre el menu
     while (area_loop)
     {
         system("cls");
@@ -43,7 +43,7 @@ void principal()
         cin >> choice;
 
         switch (choice)
-        {
+        { //Cada area tiene su propio menu
         case 1:
             menu1();
             break;
@@ -55,7 +55,7 @@ void principal()
             break;
         case 4:
             cout << "Saliendo..." << endl;
-            area_loop = false;
+            area_loop = false; //La unica opción para salir del programa es con este boton
             break;
         default:
             cout << "Opcion inválida" << endl;
@@ -90,13 +90,13 @@ void menu1()
         {
 
         case 1:
-            employeInfo(1);
+            employeInfo(1); //Agregar la información al caso 1 del switch dentro de la función
             break;
         case 2:
             showInfoCocina();
             break;
         case 3:
-            menu_loop = false;
+            menu_loop = false; //Sale del loop, pero vuelve al primer loop
             break;
         default:
             cout << "Opcion invalida" << endl;
@@ -130,7 +130,7 @@ void menu2()
         {
 
         case 1:
-            employeInfo(2);
+            employeInfo(2); //Agregar la información al caso 2 del switch dentro de la función
             break;
         case 2:
             showInfoMesero();
@@ -170,7 +170,7 @@ void menu3()
         {
 
         case 1:
-            employeInfo(3);
+            employeInfo(3); //Agregar la información al caso 3 del switch dentro de la función
             break;
         case 2:
             showInfoBar();
@@ -185,14 +185,14 @@ void menu3()
     }
 }
 
-void employeInfo(int area)
+void employeInfo(int area) //se le agrega la variable que se usara para el switch
 {
-    int numTrabajadores;
+    int numTrabajadores; //se define variable
     cout << "Ingrese la cantidad de personas a agregar: ";
     cin >> numTrabajadores;
-    cin.ignore(); // Limpiar el buffer de entrada
+    cin.ignore(); 
 
-    Trabajador trabajadores[numTrabajadores];
+    Trabajador trabajadores[numTrabajadores]; //arreglo tipo Trabajador, que usa la variable definida 
     for (int i = 0; i < numTrabajadores; ++i)
     {
         cout << "Trabajador " << i + 1 << ":" << endl;
@@ -204,7 +204,7 @@ void employeInfo(int area)
         cin >> trabajadores[i].horaEntrada;
         cout << "Hora de salida (0-23): ";
         cin >> trabajadores[i].horaSalida;
-        cin.ignore(); // Limpiar el buffer de entrada
+        cin.ignore(); //Se limpia el enter que se dio al ingresar la hora de entrada
     }
 
     // Guardar información en archivos separados según el área
@@ -222,7 +222,7 @@ void employeInfo(int area)
         break;
     }
 
-    for (int i = 0; i < numTrabajadores; ++i)
+    for (int i = 0; i < numTrabajadores; ++i) //for para agregar la información en el archivo de texto
     {
         outFile << trabajadores[i].nombre << " "
                 << trabajadores[i].apellido << " "
@@ -234,18 +234,18 @@ void employeInfo(int area)
     principal();
 }
 
-void showInfoCocina()
+void showInfoCocina() //Cada area de trabajo tiene su propio Showinfo
 {
     ifstream inFile("trabajadores_cocina.txt");
-    if (!inFile)
+    if (!inFile) //Si el archivo no existe o no se puede abrir pasa esto
     {
         cout << "No se pudo abrir el archivo de trabajadores de cocina." << endl;
         return principal();
     }
 
-    char nombre[MAX], apellido[MAX];
+    char nombre[MAX], apellido[MAX]; //definen variables que se deberian encontrar en el archivo
     int horaEntrada, horaSalida;
-    while (inFile >> nombre >> apellido >> horaEntrada >> horaSalida)
+    while (inFile >> nombre >> apellido >> horaEntrada >> horaSalida) //minetras existan estas variables dentro del archivo se muestra lo siguiente...
     {
         int resul = (horaSalida - horaEntrada) * 500;
         cout << endl;
@@ -258,7 +258,7 @@ void showInfoCocina()
     system("pause");
 }
 
-void showInfoMesero()
+void showInfoMesero() //Cada area de trabajo tiene su propio Showinfo... sigan los consejos del primer showinfo
 {
     ifstream inFile("trabajadores_meseros.txt");
     if (!inFile)
@@ -282,7 +282,7 @@ void showInfoMesero()
     system("pause");
 }
 
-void showInfoBar()
+void showInfoBar() //Cada area de trabajo tiene su propio Showinfo... sigan los consejos del primer showinfo
 {
     ifstream inFile("trabajadores_bar.txt");
     if (!inFile)
@@ -306,7 +306,7 @@ void showInfoBar()
     system("pause");
 }
 
-void showTitle()
+void showTitle() //funcion para mostrar el titulo principal
 {
     cout << "  ________  __  __    __               __               _______                             __    __                          __                    " << endl;
     cout << " /        |/  |/  |  /  |             /  |             /       \\                           /  \\  /  |                        /  |                   " << endl;
@@ -320,7 +320,7 @@ void showTitle()
 }
 
 void showTitleCocina(){
-    
+    //Cada area tiene su propio titulo para ubicar al usuario donde se encuentra trabajando
 cout << " $$$$$$\\                                                                              $$\\                     " << endl;
 cout << "$$  __$$\\                                                                             \\__|                    " << endl;
 cout << "$$ /  $$ | $$$$$$\\   $$$$$$\\  $$$$$$$\\   $$$$$$\\         $$$$$$$\\  $$$$$$\\   $$$$$$$\\ $$\\ $$$$$$$\\   $$$$$$\\  " << endl;
