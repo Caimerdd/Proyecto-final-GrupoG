@@ -1,5 +1,5 @@
 #include <iostream>
-#include "funciones.cpp"
+#include "menu.cpp"
 
 using namespace std;
 
