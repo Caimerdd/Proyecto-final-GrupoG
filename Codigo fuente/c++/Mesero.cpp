@@ -1,45 +1,32 @@
 #include <iostream>
 #include <fstream>
+#define MAX 100
+
 using namespace std;
 
 void showInfoMesero();
-void showTitleMesero();
 
 void showInfoMesero() // Cada area de trabajo tiene su propio Showinfo... sigan los consejos del primer showinfo
 {
-    ifstream inFile("trabajadores_meseros.txt");
+    ifstream inFile;
+    inFile.open("trabajadores_meseros.txt");
     if (!inFile)
     {
-        cout << "No se pudo abrir el archivo de trabajadores de meseros." << endl;
         return;
     }
 
-    char nombre[MAX], apellido[MAX];
-    int horaEntrada, horaSalida;
-    while (inFile >> nombre >> apellido >> horaEntrada >> horaSalida)
+    Trabajador trabajador;
+    while (inFile >> trabajador.id >> trabajador.nombre >> trabajador.apellido >> trabajador.horaEntrada >> trabajador.horaSalida >> trabajador.paga)
     {
-        int resul = (horaSalida - horaEntrada) * 300;
-        cout << endl;
-        cout << "Trabajador: " << nombre << " " << apellido << endl;
-        cout << "Horario: " << horaEntrada << ":00 - " << horaSalida << ":00" << endl;
-        cout << "Paga: " << resul << " C$" << endl;
-        cout << endl;
+        cout << "ID: " << trabajador.id << endl;
+        cout << "Nombre: " << trabajador.nombre << endl;
+        cout << "Apellido: " << trabajador.apellido << endl;
+        cout << "Hora de entrada: " << trabajador.horaEntrada << endl;
+        cout << "Hora de salida: " << trabajador.horaSalida << endl;
+        cout << "Paga: " << trabajador.paga << endl;
+        cout << "--------------------------" << endl;
     }
+
     inFile.close();
     system("pause");
 }
- 
-void showTitleMesero()
-{
-    
-
-    cout << " $$$$$$\\                                                                                                                          " << endl;
-    cout << "$$  __$$\\                                                                                                                         " << endl;
-    cout << "$$ /  $$ | $$$$$$\\   $$$$$$\\  $$$$$$$\\   $$$$$$\\        $$$$$$\\$$$$\\   $$$$$$\\   $$$$$$$\\  $$$$$$\\   $$$$$$\\   $$$$$$\\   $$$$$$$\\ " << endl;
-    cout << "$$$$$$$$ |$$  __$$\\ $$  __$$\\ $$  __$$\\  \\____$$\\       $$  _$$  _$$\\ $$  __$$\\ $$  _____|$$  __$$\\ $$  __$$\\ $$  __$$\\ $$  _____|" << endl;
-    cout << "$$  __$$ |$$ |  \\__|$$$$$$$$ |$$ |  $$ | $$$$$$$ |      $$ / $$ / $$ |$$$$$$$$ |\\$$$$$$\\  $$$$$$$$ |$$ |  \\__|$$ /  $$ |\\$$$$$$\\  " << endl;
-    cout << "$$ |  $$ |$$ |      $$   ____|$$ |  $$ |$$  __$$ |      $$ | $$ | $$ |$$   ____| \\____$$\\ $$   ____|$$ |      $$ |  $$ | \\____$$\\ " << endl;
-    cout << "$$ |  $$ |$$ |      \\$$$$$$$\\ $$ |  $$ |\\$$$$$$$ |      $$ | $$ | $$ |\\$$$$$$$\\ $$$$$$$  |\\$$$$$$$\\ $$ |      \\$$$$$$  |$$$$$$$  |" << endl;
-    cout << "\\__|  \\__|\\__|       \\_______|\\__|  \\__| \\_______|      \\__| \\__| \\__| \\_______|\\_______/  \\_______|\\__|       \\______/ \\_______/ " << endl;
-}
-

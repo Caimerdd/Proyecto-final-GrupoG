@@ -1,37 +1,16 @@
 #include <iostream>
 #include <fstream>
+#include <cstring>
 #include "variables.h"
 
 using namespace std;
 
-void showTitle();
 void employeInfo(int area);
-void showTitleAdd();
-void showTitlelist();
+void editarTrabajador(int area);
+void eliminarTrabajador(int area);
 
 void employeInfo(int area) // se le agrega la variable que se usara para el switch
-{
-    int numTrabajadores; // se define variable
-    cout << "Ingrese la cantidad de personas a agregar: ";
-    cin >> numTrabajadores;
-    cin.ignore();
-
-    Trabajador trabajadores[numTrabajadores]; // arreglo tipo Trabajador, que usa la variable definida
-    for (int i = 0; i < numTrabajadores; ++i)
-    {
-        cout << "Trabajador " << i + 1 << ":" << endl;
-        cout << "Nombre: ";
-        cin.getline(trabajadores[i].nombre, MAX);
-        cout << "Apellido: ";
-        cin.getline(trabajadores[i].apellido, MAX);
-        cout << "Hora de entrada (0-24): ";
-        cin >> trabajadores[i].horaEntrada;
-        cout << "Hora de salida (0-24): ";
-        cin >> trabajadores[i].horaSalida;
-        cin.ignore(); // Se limpia el enter que se dio al ingresar la hora de entrada
-    }
-
-    // Guardar información en archivos separados según el área
+{   
     ofstream outFile;
     switch (area)
     {
@@ -46,59 +25,157 @@ void employeInfo(int area) // se le agrega la variable que se usara para el swit
         break;
     }
 
-    for (int i = 0; i < numTrabajadores; ++i) // for para agregar la información en el archivo de texto
-    {
-        outFile << trabajadores[i].nombre << " "
-                << trabajadores[i].apellido << " "
-                << trabajadores[i].horaEntrada << " "
-                << trabajadores[i].horaSalida << endl;
-    }
+    Trabajador trabajador;
+    do {
+        cout << "Ingrese ID del trabajador (0 para salir): ";
+        cin >> trabajador.id;
+        if (trabajador.id == 0) break;
+        cin.ignore();
+        cout << "Nombre: ";
+        cin.getline(trabajador.nombre, MAX);
+        cout << "Apellido: ";
+        cin.getline(trabajador.apellido, MAX);
+        do {
+            cout << "Hora de entrada (0-23): ";
+            cin >> trabajador.horaEntrada;
+        } while (trabajador.horaEntrada < 0 || trabajador.horaEntrada > 23);
+        do {
+            cout << "Hora de salida (0-23): ";
+            cin >> trabajador.horaSalida;
+        } while (trabajador.horaSalida < 0 || trabajador.horaSalida > 23);
+        cin.ignore();
+
+        trabajador.paga = (trabajador.horaSalida - trabajador.horaEntrada) *
+                          (area == 1 ? 400 : (area == 2 ? 300 : 400));
+
+        outFile << trabajador.id << " "
+                << trabajador.nombre << " "
+                << trabajador.apellido << " "
+                << trabajador.horaEntrada << " "
+                << trabajador.horaSalida << " "
+                << trabajador.paga << endl;
+    } while (true);
 
     outFile.close();
-};
+}
 
-void showTitle() // funcion para mostrar el titulo principal
+void editarTrabajador(int area)
 {
-    cout << "  ________  __  __    __               __               _______                             __    __                          __                    " << endl;
-    cout << " /        |/  |/  |  /  |             /  |             /       \\                           /  \\  /  |                        /  |                   " << endl;
-    cout << " $$$$$$$$/ $$ |$$/  _$$ |_     ______ $$/_______       $$$$$$$  |  ______    ______        $$  \\ $$ |  ______   _____  ____  $$/  _______    ______  " << endl;
-    cout << " $$ |__    $$ |/  |/ $$   |   /      \\$//       |      $$ |__$$ | /      \\  /      \\       $$$  \\$$ | /      \\ /     \\/    \\ /  |/       \\  /      \\ " << endl;
-    cout << " $$    |   $$ |$$ |$$$$$$/   /$$$$$$  |/$$$$$$$/       $$    $$<  $$$$$$  |/$$$$$$  |      $$$$  $$ |/$$$$$$  |$$$$$$ $$$$  |$$ |$$$$$$$  | $$$$$$  |" << endl;
-    cout << " $$$$$/    $$ |$$ |  $$ | __ $$    $$ |$$      \\       $$$$$$$  | /    $$ |$$ |  $$/       $$ $$ $$ |$$ |  $$ |$$ | $$ | $$ |$$ |$$ |  $$ | /    $$ |" << endl;
-    cout << " $$ |_____ $$ |$$ |  $$ |/  |$$$$$$$$/  $$$$$$  |      $$ |__$$ |/$$$$$$$ |$$ |            $$ |$$$$ |$$ \\__$$ |$$ | $$ | $$ |$$ |$$ |  $$ |/$$$$$$$ |" << endl;
-    cout << " $$       |$$ |$$ |  $$  $$/ $$       |/     $$/       $$    $$/ $$    $$ |$$ |            $$ | $$$ |$$    $$/ $$ | $$ | $$ |$$ |$$ |  $$ |$$    $$ |" << endl;
-    cout << " $$$$$$$$/ $$/ $$/    $$$$/   $$$$$$$/ $$$$$$$/        $$$$$$$/   $$$$$$$/ $$/             $$/   $$/  $$$$$$/  $$/  $$/  $$/ $$/ $$/   $$/  $$$$$$$/ " << endl;
-};
+    ifstream inFile;
+    ofstream outFile;
+    char filename[MAX];
 
-void showTitleAdd()
+    switch (area)
+    {
+    case 1:
+        strcpy(filename, "trabajadores_cocina.txt");
+        break;
+    case 2:
+        strcpy(filename, "trabajadores_meseros.txt");
+        break;
+    case 3:
+        strcpy(filename, "trabajadores_bar.txt");
+        break;
+    }
+
+    inFile.open(filename);
+    if (!inFile) {
+        cout << "No se pudo abrir el archivo." << endl;
+        return;
+    }
+
+    int id;
+    cout << "Ingrese el ID del trabajador a editar: ";
+    cin >> id;
+
+    Trabajador trabajador;
+    ofstream tempFile("temp.txt");
+
+    bool found = false;
+    while (inFile >> trabajador.id >> trabajador.nombre >> trabajador.apellido >> trabajador.horaEntrada >> trabajador.horaSalida >> trabajador.paga)
+    {
+        if (trabajador.id == id) {
+            found = true;
+            cout << "Ingrese nuevos datos para el trabajador con ID " << id << ":" << endl;
+            cin.ignore();
+            cout << "Nombre: ";
+            cin.getline(trabajador.nombre, MAX);
+            cout << "Apellido: ";
+            cin.getline(trabajador.apellido, MAX);
+            do {
+                cout << "Hora de entrada (0-23): ";
+                cin >> trabajador.horaEntrada;
+            } while (trabajador.horaEntrada < 0 || trabajador.horaEntrada > 23);
+            do {
+                cout << "Hora de salida (0-23): ";
+                cin >> trabajador.horaSalida;
+            } while (trabajador.horaSalida < 0 || trabajador.horaSalida > 23);
+
+            trabajador.paga = (trabajador.horaSalida - trabajador.horaEntrada) *
+                              (area == 1 ? 400 : (area == 2 ? 300 : 400));
+        }
+        tempFile << trabajador.id << " " << trabajador.nombre << " " << trabajador.apellido << " " << trabajador.horaEntrada << " " << trabajador.horaSalida << " " << trabajador.paga << endl;
+    }
+
+    inFile.close();
+    tempFile.close();
+    remove(filename);
+    rename("temp.txt", filename);
+
+    if (!found) {
+        cout << "No se encontró un trabajador con ID " << id << endl;
+    }
+}
+
+void eliminarTrabajador(int area)
 {
+    ifstream inFile;
+    ofstream outFile;
+    char filename[MAX];
 
-    cout << "  /$$$$$$                                                                    /$$                      " << endl;
-    cout << " /$$__  $$                                                                  | $$                      " << endl;
-    cout << "| $$  \\ $$  /$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$  /$$$$$$$   /$$$$$$$  /$$$$$$             " << endl;
-    cout << "| $$$$$$$$ /$$__  $$ /$$__  $$ /$$__  $$ /$$__  $$ |____  $$| $$__  $$ /$$__  $$ /$$__  $$            " << endl;
-    cout << "| $$__  $$| $$  \\ $$| $$  \\__/| $$$$$$$$| $$  \\ $$  /$$$$$$$| $$  \\ $$| $$  | $$| $$  \\ $$            " << endl;
-    cout << "| $$  | $$| $$  | $$| $$      | $$_____/| $$  | $$ /$$__  $$| $$  | $$| $$  | $$| $$  | $$            " << endl;
-    cout << "| $$  | $$|  $$$$$$$| $$      |  $$$$$$$|  $$$$$$$|  $$$$$$$| $$  | $$|  $$$$$$$|  $$$$$$//$$ /$$ /$$ " << endl;
-    cout << "|__/  |__/ \\____  $$|__/       \\_______/ \\____  $$ \\_______/|__/  |__/ \\_______/ \\______/|__/|__/|__/ " << endl;
-    cout << "           /$$  \\ $$                     /$$  \\ $$                                                    " << endl;
-    cout << "          |  $$$$$$/                    |  $$$$$$/                                                    " << endl;
-    cout << "           \\______/                      \\______/                                                     " << endl;
-    cout << endl;
-    cout << endl;
-};
+    switch (area)
+    {
+    case 1:
+        strcpy(filename, "trabajadores_cocina.txt");
+        break;
+    case 2:
+        strcpy(filename, "trabajadores_meseros.txt");
+        break;
+    case 3:
+        strcpy(filename, "trabajadores_bar.txt");
+        break;
+    }
 
-void showTitlelist()
-{
-    cout << "               /$$       /$$             /$$                            " << endl;
-    cout << "              | $$      |__/            | $$                            " << endl;
-    cout << "              | $$       /$$  /$$$$$$$ /$$$$$$    /$$$$$$               " << endl;
-    cout << " /$$$$$$      | $$      | $$ /$$_____/|_  $$_/   |____  $$       /$$$$$$" << endl;
-    cout << "|______/      | $$      | $$|  $$$$$$   | $$      /$$$$$$$      |______/" << endl;
-    cout << "              | $$      | $$ \\____  $$  | $$ /$$ /$$__  $$              " << endl;
-    cout << "              | $$$$$$$$| $$ /$$$$$$$/  |  $$$$/|  $$$$$$$              " << endl;
-    cout << "              |________/|__/|_______/    \\___/   \\_______/              " << endl;
-    cout << "                                                                        " << endl;
-    cout << "                                                                        " << endl;
-    cout << endl;
-};
+    inFile.open(filename);
+    if (!inFile) {
+        cout << "No se pudo abrir el archivo." << endl;
+        return;
+    }
+
+    int id;
+    cout << "Ingrese el ID del trabajador a eliminar: ";
+    cin >> id;
+
+    Trabajador trabajador;
+    ofstream tempFile("temp.txt");
+
+    bool found = false;
+    while (inFile >> trabajador.id >> trabajador.nombre >> trabajador.apellido >> trabajador.horaEntrada >> trabajador.horaSalida >> trabajador.paga)
+    {
+        if (trabajador.id != id) {
+            tempFile << trabajador.id << " " << trabajador.nombre << " " << trabajador.apellido << " " << trabajador.horaEntrada << " " << trabajador.horaSalida << " " << trabajador.paga << endl;
+        } else {
+            found = true;
+        }
+    }
+
+    inFile.close();
+    tempFile.close();
+
+    if (!found) {
+        remove("temp.txt");
+    } else {
+        remove(filename);
+        rename("temp.txt", filename);
+    }
+}

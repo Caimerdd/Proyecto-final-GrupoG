@@ -3,14 +3,14 @@
 #include "Cocina.cpp"
 #include "Mesero.cpp"
 #include "Bar.cpp"
+#include "titulos.cpp"
 
 using namespace std;
 
 void principal();
-void menu1();   
+void menu1();
 void menu2();
 void menu3();
-
 
 void principal()
 {
@@ -59,7 +59,6 @@ void principal()
 
 void menu1()
 {
-
     bool menu_loop = true;
 
     while (menu_loop)
@@ -74,18 +73,21 @@ void menu1()
         cout << endl;
         cout << "2. Mostrar trabajadores" << endl;
         cout << endl;
-        cout << "3. Volver" << endl;
+        cout << "3. Editar trabajador" << endl;
+        cout << endl;
+        cout << "4. Eliminar trabajador" << endl;
+        cout << endl;
+        cout << "5. Volver" << endl;
         cout << endl;
         cout << "Ingrese una opcion: ";
         cin >> choice;
 
         switch (choice)
         {
-
         case 1:
             system("cls");
             showTitleAdd();
-            employeInfo(1); // Agregar la información al caso 1 del switch dentro de la función
+            employeInfo(1);
             break;
         case 2:
             system("cls");
@@ -93,7 +95,17 @@ void menu1()
             showInfoCocina();
             break;
         case 3:
-            menu_loop = false; // Sale del loop, pero vuelve al primer loop
+            system("cls");
+            showTitleEdit();
+            editarTrabajador(1);
+            break;
+        case 4:
+            system("cls");
+            showTitleDelete();
+            eliminarTrabajador(1);
+            break;
+        case 5:
+            menu_loop = false;
             break;
         default:
             cout << "Opcion invalida" << endl;
@@ -107,7 +119,6 @@ void menu2()
     bool menu_loop = true;
     while (menu_loop)
     {
-
         int choice;
         system("cls");
         showTitleMesero();
@@ -118,18 +129,21 @@ void menu2()
         cout << endl;
         cout << "2. Mostrar trabajadores" << endl;
         cout << endl;
-        cout << "3. Volver" << endl;
+        cout << "3. Editar trabajador" << endl;
+        cout << endl;
+        cout << "4. Eliminar trabajador" << endl;
+        cout << endl;
+        cout << "5. Volver" << endl;
         cout << endl;
         cout << "Ingrese una opcion: ";
         cin >> choice;
 
         switch (choice)
         {
-
         case 1:
             system("cls");
             showTitleAdd();
-            employeInfo(2); // Agregar la información al caso 2 del switch dentro de la función
+            employeInfo(2);
             break;
         case 2:
             system("cls");
@@ -137,6 +151,16 @@ void menu2()
             showInfoMesero();
             break;
         case 3:
+            system("cls");
+            showTitleEdit();
+            editarTrabajador(2);
+            break;
+        case 4:
+            system("cls");
+            showTitleDelete();
+            eliminarTrabajador(2);
+            break;
+        case 5:
             menu_loop = false;
             break;
         default:
@@ -151,7 +175,6 @@ void menu3()
     bool menu_loop = true;
     while (menu_loop)
     {
-
         int choice;
         system("cls");
         showTitleBar();
@@ -162,18 +185,21 @@ void menu3()
         cout << endl;
         cout << "2. Mostrar trabajadores" << endl;
         cout << endl;
-        cout << "3. Volver" << endl;
+        cout << "3. Editar trabajador" << endl;
+        cout << endl;
+        cout << "4. Eliminar trabajador" << endl;
+        cout << endl;
+        cout << "5. Volver" << endl;
         cout << endl;
         cout << "Ingrese una opcion: ";
         cin >> choice;
 
         switch (choice)
         {
-
         case 1:
             system("cls");
             showTitleAdd();
-            employeInfo(3); // Agregar la información al caso 3 del switch dentro de la función
+            employeInfo(3);
             break;
         case 2:
             system("cls");
@@ -181,10 +207,20 @@ void menu3()
             showInfoBar();
             break;
         case 3:
+            system("cls");
+            showTitleEdit();
+            editarTrabajador(3);
+            break;
+        case 4:
+            system("cls");
+            showTitleDelete();
+            eliminarTrabajador(3);
+            break;
+        case 5:
             menu_loop = false;
             break;
         default:
-            cout << "Opción invalida" << endl;
+            cout << "Opcion invalida" << endl;
             break;
         }
     }
